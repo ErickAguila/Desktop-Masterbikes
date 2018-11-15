@@ -1,0 +1,78 @@
+--------------------------------------------------------
+-- Archivo creado  - sábado-junio-30-2018   
+--------------------------------------------------------
+--------------------------------------------------------
+--  DDL for Table PRODUCTO
+--------------------------------------------------------
+
+  CREATE TABLE "BODEGA"."PRODUCTO" 
+   (	"ID_PRODUCTO" NUMBER(*,0), 
+	"NOMBRE" VARCHAR2(20 BYTE), 
+	"MARCA" VARCHAR2(20 BYTE), 
+	"MODELO" VARCHAR2(20 BYTE), 
+	"DESCRIPCION" VARCHAR2(100 BYTE), 
+	"CANTIDAD" NUMBER(*,0)
+   ) SEGMENT CREATION IMMEDIATE 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+REM INSERTING into BODEGA.PRODUCTO
+SET DEFINE OFF;
+Insert into BODEGA.PRODUCTO (ID_PRODUCTO,NOMBRE,MARCA,MODELO,DESCRIPCION,CANTIDAD) values ('1','Volante triple','Sumtour','xx22','Volante','5');
+Insert into BODEGA.PRODUCTO (ID_PRODUCTO,NOMBRE,MARCA,MODELO,DESCRIPCION,CANTIDAD) values ('2','Frenos','SHIMANO','R1','Freno','8');
+Insert into BODEGA.PRODUCTO (ID_PRODUCTO,NOMBRE,MARCA,MODELO,DESCRIPCION,CANTIDAD) values ('3','Cadena','MosterBikes','ui23','Cadenas','6');
+Insert into BODEGA.PRODUCTO (ID_PRODUCTO,NOMBRE,MARCA,MODELO,DESCRIPCION,CANTIDAD) values ('4','Pedal','Bianchi','ty0987','Pedal de bicicleta','5');
+--------------------------------------------------------
+--  DDL for Index PRODUCTO_PK
+--------------------------------------------------------
+
+  CREATE UNIQUE INDEX "BODEGA"."PRODUCTO_PK" ON "BODEGA"."PRODUCTO" ("ID_PRODUCTO") 
+  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+--------------------------------------------------------
+--  DDL for Package STOCK
+--------------------------------------------------------
+
+  CREATE OR REPLACE PACKAGE "BODEGA"."STOCK" AS 
+procedure proc_obtener_stock(p_id PRODUCTO.ID_PRODUCTO%TYPE,pcursor out sys_refcursor);
+  /* TODO enter package declarations (types, exceptions, methods etc) here */ 
+
+END STOCK;
+
+
+/
+--------------------------------------------------------
+--  DDL for Package Body STOCK
+--------------------------------------------------------
+
+  CREATE OR REPLACE PACKAGE BODY "BODEGA"."STOCK" AS
+
+  procedure proc_obtener_stock(p_id PRODUCTO.ID_PRODUCTO%TYPE,pcursor out sys_refcursor) AS
+  BEGIN
+    OPEN pcursor FOR
+    SELECT ID_PRODUCTO,NOMBRE,MODELO,MARCA,DESCRIPCION, DESCRIPCION,CANTIDAD FROM PRODUCTO 
+    where ID_PRODUCTO=p_id;--NOMBRE LIKE '%'||p_nombre||'%';
+    END proc_obtener_stock;
+
+END STOCK;
+
+
+/
+--------------------------------------------------------
+--  Constraints for Table PRODUCTO
+--------------------------------------------------------
+
+  ALTER TABLE "BODEGA"."PRODUCTO" MODIFY ("ID_PRODUCTO" NOT NULL ENABLE);
+  ALTER TABLE "BODEGA"."PRODUCTO" MODIFY ("NOMBRE" NOT NULL ENABLE);
+  ALTER TABLE "BODEGA"."PRODUCTO" MODIFY ("MARCA" NOT NULL ENABLE);
+  ALTER TABLE "BODEGA"."PRODUCTO" MODIFY ("MODELO" NOT NULL ENABLE);
+  ALTER TABLE "BODEGA"."PRODUCTO" MODIFY ("DESCRIPCION" NOT NULL ENABLE);
+  ALTER TABLE "BODEGA"."PRODUCTO" MODIFY ("CANTIDAD" NOT NULL ENABLE);
+  ALTER TABLE "BODEGA"."PRODUCTO" ADD CONSTRAINT "PRODUCTO_PK" PRIMARY KEY ("ID_PRODUCTO")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS"  ENABLE;
